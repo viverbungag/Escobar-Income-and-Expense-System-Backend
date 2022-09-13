@@ -6,5 +6,5 @@ public interface ExpenseDao {
 
     List<ExpenseDto> getAllExpensesByMonth();
 
-    List<ExpenseBarGraphDto> getBarGraphDataByMonth();
+    List<ExpenseBarGraphDto> getGraphDataByMonth();
 }

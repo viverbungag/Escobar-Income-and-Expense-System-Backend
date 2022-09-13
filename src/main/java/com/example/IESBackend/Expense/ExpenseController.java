@@ -26,4 +26,9 @@ public class ExpenseController {
     public List<ExpenseBarGraphDto> getBarGraphDataByMonth(){
         return expenseService.getBarGraphDataByMonth();
     }
+
+    @PostMapping("/donut-graph")
+    public List<ExpenseDonutGraphDto> getDonutGraphDataByMonth(){
+        return expenseService.getDonutGraphDataByMonth();
+    }
 }

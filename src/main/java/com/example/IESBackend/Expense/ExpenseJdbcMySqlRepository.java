@@ -45,7 +45,7 @@ public class ExpenseJdbcMySqlRepository implements ExpenseDao{
         return expenseBarGraphDto;
     }
 
-    public List<ExpenseBarGraphDto> getBarGraphDataByMonth(){
+    public List<ExpenseBarGraphDto> getGraphDataByMonth(){
         String query = """
                 SELECT expense_date, SUM(expense_cost) as expense, income
                 FROM (
