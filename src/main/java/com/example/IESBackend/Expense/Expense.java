@@ -31,6 +31,10 @@ public class Expense {
     private ExpenseCategory expenseCategory;
 
     @NonNull
+    @Column(name = "expense_description")
+    private String expenseDescription;
+
+    @NonNull
     @Column(name = "expense_date")
     private LocalDateTime expenseDate;
 

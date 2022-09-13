@@ -1,6 +1,7 @@
 package com.example.IESBackend.Security;
 
-import com.exe.escobar.IMSBackend.Employee.Employee;
+
+import com.example.IESBackend.Employee.Employee;
 import lombok.*;
 
 import javax.persistence.*;
