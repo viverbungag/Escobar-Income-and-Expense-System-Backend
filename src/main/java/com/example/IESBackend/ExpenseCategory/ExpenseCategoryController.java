@@ -20,7 +20,7 @@ public class ExpenseCategoryController {
         return expenseCategoryService.getAllActiveExpenseCategoryNames();
     }
 
-    @PostMapping
+    @PostMapping("/paged")
     public Map<String, Object> getAllExpenseCategories(@RequestBody PaginationDto paginationDto){
         return expenseCategoryService.getAllExpenseCategories(paginationDto);
     }
@@ -54,5 +54,7 @@ public class ExpenseCategoryController {
     public void updateExpenseCategory(@RequestBody ExpenseCategoryDto expenseCategoryDto, @PathVariable Long id){
         expenseCategoryService.updateExpenseCategory(expenseCategoryDto, id);
     }
+
+
 
 }

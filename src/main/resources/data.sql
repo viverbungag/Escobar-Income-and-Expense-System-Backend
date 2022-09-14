@@ -229,9 +229,9 @@ INSERT INTO customer_food_order(food_order_id, order_id) VALUES (7, 7);
 INSERT INTO customer_food_order(food_order_id, order_id) VALUES (8, 8);
 INSERT INTO customer_food_order(food_order_id, order_id) VALUES (9, 9);
 
-INSERT INTO expense_category(expense_category_name) VALUES ('Light-Utility');
-INSERT INTO expense_category(expense_category_name) VALUES ('Water-Utility');
-INSERT INTO expense_category(expense_category_name) VALUES ('Internet-Utility');
+INSERT INTO expense_category(expense_category_name) VALUES ('Electricity');
+INSERT INTO expense_category(expense_category_name) VALUES ('Water');
+INSERT INTO expense_category(expense_category_name) VALUES ('Internet');
 
 INSERT INTO expense(expense_date, expense_cost, expense_description, expense_category_id) VALUES ('2022-08-10', 1100, '', 1);
 INSERT INTO expense(expense_date, expense_cost, expense_description, expense_category_id) VALUES ('2022-08-10', 1200, '', 2);

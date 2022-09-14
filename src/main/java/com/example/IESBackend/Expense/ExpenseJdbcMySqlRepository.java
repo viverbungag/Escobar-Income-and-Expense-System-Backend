@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository("expense_jdbc_mysql")
@@ -19,22 +21,51 @@ public class ExpenseJdbcMySqlRepository implements ExpenseDao{
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    private ExpenseTransactionDto mapExpenseTransactionResult(final ResultSet rs) throws SQLException {
+        ExpenseTransactionDto expenseTransactionDto = new ExpenseTransactionDto();
+        expenseTransactionDto.setTransactionId(rs.getLong("transaction_id"));
+        expenseTransactionDto.setTransactionDate(rs.getObject("transaction_date", LocalDateTime.class));
+        expenseTransactionDto.setSupplyName(rs.getString("supply_name"));
+
+        BigDecimal pricePerUnit = rs.getObject("price_per_unit", BigDecimal.class);
+        BigDecimal quantity = rs.getObject("price_per_unit", BigDecimal.class);
+        expenseTransactionDto.setExpenseCost(pricePerUnit.multiply(quantity));
+
+        return expenseTransactionDto;
+    }
+
+    public List<ExpenseTransactionDto> getAllTransactionExpensesByMonth(){
+        String query = """
+                 SELECT * FROM transaction
+                    INNER JOIN supply ON transaction.supply_id = supply.supply_id;
+                """;
+
+        List<ExpenseTransactionDto> transactionExpenses = jdbcTemplate
+                .query(query, (rs, rowNum) -> mapExpenseTransactionResult(rs));
+
+        return transactionExpenses;
+    }
+
     private ExpenseDto mapExpenseResult(final ResultSet rs) throws SQLException {
         ExpenseDto expenseDto = new ExpenseDto();
-        expenseDto.setExpenseCategoryName("Transaction");
+        expenseDto.setExpenseId(rs.getLong("expense_id"));
+        expenseDto.setExpenseCategoryName(rs.getString("expense_category_name"));
+        expenseDto.setExpenseDescription(rs.getString("expense_description"));
+        expenseDto.setExpenseDate(rs.getObject("expense_date", LocalDateTime.class));
+        expenseDto.setExpenseCost(rs.getBigDecimal("expense_cost"));
+
         return expenseDto;
     }
 
     public List<ExpenseDto> getAllExpensesByMonth(){
         String query = """
-         SELECT DATE_FORMAT(transaction_date, '%M %Y'), SUM(price_per_unit * transaction_supply_quantity)
-         FROM transaction WHERE transaction_type = 'STOCK_IN'
-         GROUP BY DATE_FORMAT(transaction_date, '%M %Y');
-        """;
+                 SELECT * FROM expense
+                    INNER JOIN expense_category ON expense.expense_category_id = expense_category.expense_category_id;
+                """;
+        List<ExpenseDto> expenses = jdbcTemplate
+                .query(query, (rs, rowNum) -> mapExpenseResult(rs));
 
-        List<ExpenseDto> transactionExpenses = jdbcTemplate.query(query, (rs, rowNum) -> mapExpenseResult(rs));
-
-        return transactionExpenses;
+        return expenses;
     }
 
     private ExpenseBarGraphDto mapExpenseBarGraphDateResult(final ResultSet rs) throws SQLException {
@@ -67,6 +98,57 @@ public class ExpenseJdbcMySqlRepository implements ExpenseDao{
         List<ExpenseBarGraphDto> barGraphData = jdbcTemplate.query(query, (rs, rowNum) -> mapExpenseBarGraphDateResult(rs));
 
         return barGraphData;
-    };
+    }
+
+    public void addExpense(Long expenseCategoryId,
+                           String expenseDescription,
+                           LocalDateTime expenseDate,
+                           BigDecimal expenseCost){
+
+        String query = """
+                INSERT INTO expense(expense_category_id, expense_description, expense_date, expense_cost)
+                VALUES (?, ?, ?, ?)
+                """;
+
+        jdbcTemplate.update(query, expenseCategoryId, expenseDescription, expenseDate, expenseCost);
+    }
+
+    public void deleteExpense(Long expenseId){
+
+        String query = """
+                DELETE FROM expense WHERE expense_id = ?
+                """;
+
+        jdbcTemplate.update(query, expenseId);
+    }
+
+    private IncomeDto mapIncomeResult(final ResultSet rs) throws SQLException {
+        IncomeDto incomeDto = new IncomeDto();
+        incomeDto.setIncomeDate(rs.getString("income_date"));
+        incomeDto.setDailyIncome(rs.getBigDecimal("daily_income"));
+
+        return incomeDto;
+    }
+
+    public List<IncomeDto> getAllIncomeByMonth(){
+
+        String query = """
+                SELECT DATE_FORMAT(order_time, '%M %d, %Y') AS income_date, SUM(total_cost) AS daily_income
+                FROM customer_food_order
+                    INNER JOIN customer_order ON customer_food_order.order_id = customer_order.order_id
+                GROUP BY order_time;
+                """;
+
+        List<IncomeDto> income = jdbcTemplate.query(query, (rs, rowNum) -> mapIncomeResult(rs));
+
+        return income;
+    }
+
+
+
+
+
+
+
 
 }
