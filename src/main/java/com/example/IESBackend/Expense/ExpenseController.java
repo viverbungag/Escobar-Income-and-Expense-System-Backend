@@ -24,14 +24,14 @@ public class ExpenseController {
         return expenseService.getAllExpensesTransactionByMonth();
     }
 
-    @PostMapping("/bar-graph")
-    public List<ExpenseBarGraphDto> getBarGraphDataByMonth(){
-        return expenseService.getBarGraphDataByMonth();
+    @PostMapping("/vertical-bar-graph")
+    public List<ExpenseBarGraphDto> getBarGraphDataByMonth(@RequestBody FromToDate fromToDate){
+        return expenseService.getBarGraphDataByMonth(fromToDate);
     }
 
     @PostMapping("/donut-graph")
-    public List<ExpenseDonutGraphDto> getDonutGraphDataByMonth(){
-        return expenseService.getDonutGraphDataByMonth();
+    public List<ExpenseDonutGraphDto> getDonutGraphDataByMonth(@RequestBody FromToDate fromToDate){
+        return expenseService.getDonutGraphDataByMonth(fromToDate);
     }
 
     @PostMapping("/add")

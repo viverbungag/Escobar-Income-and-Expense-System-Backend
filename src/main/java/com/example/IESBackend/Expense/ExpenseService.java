@@ -38,12 +38,12 @@ public class ExpenseService {
         return expenseJdbcRepository.getAllExpensesByMonth();
     }
 
-    public List<ExpenseBarGraphDto> getBarGraphDataByMonth() {
-        return expenseJdbcRepository.getGraphDataByMonth();
+    public List<ExpenseBarGraphDto> getBarGraphDataByMonth(FromToDate fromToDate) {
+        return expenseJdbcRepository.getGraphDataByMonth(fromToDate);
     }
 
-    public List<ExpenseDonutGraphDto> getDonutGraphDataByMonth(){
-        List<ExpenseBarGraphDto> graphDataByMonth = expenseJdbcRepository.getGraphDataByMonth();
+    public List<ExpenseDonutGraphDto> getDonutGraphDataByMonth(FromToDate fromToDate){
+        List<ExpenseBarGraphDto> graphDataByMonth = expenseJdbcRepository.getGraphDataByMonth(fromToDate);
         Double totalExpense = graphDataByMonth.stream().reduce(0.0, (sum, data) -> sum + data.getMonthlyExpenses(), Double::sum);
         Double totalIncome = graphDataByMonth.stream().reduce(0.0, (sum, data) -> sum + data.getMonthlyIncome(), Double::sum);
 

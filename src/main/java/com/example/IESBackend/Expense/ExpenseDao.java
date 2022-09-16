@@ -10,7 +10,7 @@ public interface ExpenseDao {
 
     List<ExpenseDto> getAllExpensesByMonth();
 
-    List<ExpenseBarGraphDto> getGraphDataByMonth();
+    List<ExpenseBarGraphDto> getGraphDataByMonth(FromToDate fromToDate);
 
     void addExpense(Long expenseCategoryId,
                            String expenseDescription,

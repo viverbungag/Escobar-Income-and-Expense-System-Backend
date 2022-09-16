@@ -76,28 +76,37 @@ public class ExpenseJdbcMySqlRepository implements ExpenseDao{
         return expenseBarGraphDto;
     }
 
-    public List<ExpenseBarGraphDto> getGraphDataByMonth(){
+    public List<ExpenseBarGraphDto> getGraphDataByMonth(FromToDate fromToDate){
+
+        LocalDateTime fromDate = fromToDate.getFromDate();
+        LocalDateTime toDate = fromToDate.getToDate();
+
+        System.out.println("fromDate: " + fromDate);
+        System.out.println("toDate: " + toDate);
+
         String query = """
                 SELECT expense_date, SUM(expense_cost) as expense, income
                 FROM (
                 	SELECT DATE_FORMAT(transaction_date, '%M %Y') AS expense_date, SUM(price_per_unit * transaction_supply_quantity) AS expense_cost
-                		FROM transaction WHERE transaction_type = 'STOCK_IN'
+                		FROM transaction WHERE transaction_type = 'STOCK_IN' AND transaction_date BETWEEN ? AND ?
                 		GROUP BY expense_date
                  UNION
                 	SELECT DATE_FORMAT(expense_date, '%M %Y') AS expense_date, SUM(expense_cost) AS expense_cost FROM expense
+                	WHERE expense_date BETWEEN ? AND ?
                 		GROUP BY expense_date
                 ) AS expense
                  INNER JOIN(
                 	SELECT DATE_FORMAT(order_time, '%M %Y') AS income_date, SUM(total_cost) AS income
                 		FROM customer_food_order
                 		INNER JOIN customer_order ON customer_food_order.order_id = customer_order.order_id
+                		WHERE order_time BETWEEN ? AND ?
                 		GROUP BY order_time) AS income ON expense_date = income_date
                 GROUP BY expense_date;
                 """;
 
-        List<ExpenseBarGraphDto> barGraphData = jdbcTemplate.query(query, (rs, rowNum) -> mapExpenseBarGraphDateResult(rs));
+        List<ExpenseBarGraphDto> graphData = jdbcTemplate.query(query, (rs, rowNum) -> mapExpenseBarGraphDateResult(rs), fromDate, toDate, fromDate, toDate, fromDate, toDate);
 
-        return barGraphData;
+        return graphData;
     }
 
     public void addExpense(Long expenseCategoryId,
