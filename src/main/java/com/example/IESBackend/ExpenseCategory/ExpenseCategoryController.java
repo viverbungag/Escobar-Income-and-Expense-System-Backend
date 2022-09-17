@@ -26,13 +26,13 @@ public class ExpenseCategoryController {
     }
 
     @PostMapping("/active")
-    public Map<String, Object> getAllActiveExpenseCategories(@RequestBody PaginationDto paginationDto){
-        return expenseCategoryService.getAllActiveExpenseCategories(paginationDto);
+    public List<ExpenseCategoryDto> getAllActiveExpenseCategories(){
+        return expenseCategoryService.getAllActiveExpenseCategories();
     }
 
     @PostMapping("/inactive")
-    public Map<String, Object> getAllInactiveExpenseCategories(@RequestBody PaginationDto paginationDto){
-        return expenseCategoryService.getAllInactiveExpenseCategories(paginationDto);
+    public List<ExpenseCategoryDto> getAllInactiveExpenseCategories(){
+        return expenseCategoryService.getAllInactiveExpenseCategories();
     }
 
     @PostMapping("/activate")

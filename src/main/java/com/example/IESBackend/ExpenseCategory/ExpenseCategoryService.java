@@ -109,20 +109,24 @@ public class ExpenseCategoryService {
                 .collect(Collectors.toList());
     }
 
-    public Map<String, Object> getAllActiveExpenseCategories(PaginationDto paginationDto){
-        Pageable pageable = initializePageable(paginationDto);
-        Page<ExpenseCategory> supplyCategoryPage = expenseCategoryRepository
-                .getAllActiveExpenseCategories(pageable);
+    public List<ExpenseCategoryDto> getAllActiveExpenseCategories(){
+        List<ExpenseCategoryDto> supplyCategoryPage = expenseCategoryRepository
+                .getAllActiveExpenseCategories()
+                .stream()
+                .map((expenseCategory) -> convertEntityToDto(expenseCategory))
+                .collect(Collectors.toList());
 
-        return initializeExpenseCategoryWithPageDetails(supplyCategoryPage, paginationDto);
+        return supplyCategoryPage;
     }
 
-    public Map<String, Object> getAllInactiveExpenseCategories(PaginationDto paginationDto){
-        Pageable pageable = initializePageable(paginationDto);
-        Page<ExpenseCategory> supplyCategoryPage = expenseCategoryRepository
-                .getAllInactiveExpenseCategories(pageable);
+    public List<ExpenseCategoryDto> getAllInactiveExpenseCategories(){
+        List<ExpenseCategoryDto> supplyCategoryPage = expenseCategoryRepository
+                .getAllInactiveExpenseCategories()
+                .stream()
+                .map((expenseCategory) -> convertEntityToDto(expenseCategory))
+                .collect(Collectors.toList());;
 
-        return initializeExpenseCategoryWithPageDetails(supplyCategoryPage, paginationDto);
+        return supplyCategoryPage;
     }
 
     public void addExpenseCategory(ExpenseCategoryDto expenseCategoryDto) {

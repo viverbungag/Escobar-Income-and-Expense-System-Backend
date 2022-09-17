@@ -23,11 +23,11 @@ public interface ExpenseCategoryMySqlRepository extends ExpenseCategoryDao, JpaR
 
     @Query(value = "SELECT * FROM #{#entityName} WHERE is_active=true",
             nativeQuery = true)
-    Page<ExpenseCategory> getAllActiveExpenseCategories(Pageable pageable);
+    List<ExpenseCategory> getAllActiveExpenseCategories();
 
     @Query(value = "SELECT * FROM #{#entityName} WHERE is_active=false",
             nativeQuery = true)
-    Page<ExpenseCategory> getAllInactiveExpenseCategories(Pageable pageable);
+    List<ExpenseCategory> getAllInactiveExpenseCategories();
 
     @Modifying
     @Query(value = "UPDATE #{#entityName} SET is_active=false WHERE expense_category_name IN :expenseCategoryNames",

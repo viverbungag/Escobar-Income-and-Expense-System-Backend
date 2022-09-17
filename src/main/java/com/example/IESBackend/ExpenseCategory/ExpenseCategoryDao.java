@@ -12,9 +12,9 @@ public interface ExpenseCategoryDao {
 
     List<ExpenseCategory> getAllActiveExpenseCategoriesList();
 
-    Page<ExpenseCategory> getAllActiveExpenseCategories(Pageable pageable);
+    List<ExpenseCategory> getAllActiveExpenseCategories();
 
-    Page<ExpenseCategory> getAllInactiveExpenseCategories(Pageable pageable);
+    List<ExpenseCategory> getAllInactiveExpenseCategories();
 
     void inactivateExpenseCategory(List<String> expenseCategoryNames);
 
