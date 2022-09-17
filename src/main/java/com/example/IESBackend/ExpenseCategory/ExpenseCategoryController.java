@@ -25,7 +25,7 @@ public class ExpenseCategoryController {
         return expenseCategoryService.getAllExpenseCategories(paginationDto);
     }
 
-    @PostMapping("/active")
+    @GetMapping("/active")
     public List<ExpenseCategoryDto> getAllActiveExpenseCategories(){
         return expenseCategoryService.getAllActiveExpenseCategories();
     }
@@ -35,7 +35,7 @@ public class ExpenseCategoryController {
         return expenseCategoryService.getAllInactiveExpenseCategories();
     }
 
-    @GetMapping("/activate")
+    @PostMapping("/activate")
     public void activateExpenseCategory(@RequestBody ExpenseCategoryListDto expenseCategoryListDto){
         expenseCategoryService.activateExpenseCategory(expenseCategoryListDto);
     }
