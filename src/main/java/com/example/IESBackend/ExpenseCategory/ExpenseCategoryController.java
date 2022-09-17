@@ -30,12 +30,12 @@ public class ExpenseCategoryController {
         return expenseCategoryService.getAllActiveExpenseCategories();
     }
 
-    @PostMapping("/inactive")
+    @GetMapping("/inactive")
     public List<ExpenseCategoryDto> getAllInactiveExpenseCategories(){
         return expenseCategoryService.getAllInactiveExpenseCategories();
     }
 
-    @PostMapping("/activate")
+    @GetMapping("/activate")
     public void activateExpenseCategory(@RequestBody ExpenseCategoryListDto expenseCategoryListDto){
         expenseCategoryService.activateExpenseCategory(expenseCategoryListDto);
     }
